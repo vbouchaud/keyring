@@ -70,12 +70,12 @@ func Add() *cli.Command {
 			&cli.StringFlag{
 				Name:     "user",
 				Required: true,
-				Usage:    "The user to use for the targeted service. (optional)",
+				Usage:    "The user to use for the targeted service.",
 			},
 			&cli.StringFlag{
 				Name:     "secret",
 				Required: false,
-				Usage:    "The secret to set.",
+				Usage:    "The secret to set. (optional)",
 			}},
 		Action: func(c *cli.Context) error {
 			var (
