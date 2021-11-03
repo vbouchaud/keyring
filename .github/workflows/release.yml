@@ -1,0 +1,107 @@
+---
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  release:
+    name: Create release and upload binaries
+    runs-on: ubuntu-latest
+
+    if: ${{ github.actor != 'dependabot[bot]' }}
+
+    strategy:
+      matrix:
+        target:
+          - "linux:arm64:"
+          - "linux:arm:"
+          - "linux:amd64:"
+          - "darwin:arm64:"
+          - "darwin:amd64:"
+          - "windows:amd64:.exe"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.17
+
+      - name: Prepare
+        id: prep
+        run: |-
+          PRE_RELEASE=false
+          if [[ $GITHUB_REF == refs/tags/* ]]; then
+            VERSION=${GITHUB_REF#refs/tags/}
+            if [[ $VERSION =~ ^*-pre$ ]]; then
+              PRE_RELEASE=true
+            fi
+          fi
+          echo ::set-output name=version::${VERSION}
+          echo ::set-output name=buildtime::$(date -u +'%FT%TZ%:z')
+          echo ::set-output name=pre::${PRE_RELEASE}
+          echo ::set-output name=go-version::$(go version | sed -r 's/go version go(.+)\s.+/\1/')
+
+      - name: Cache
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: |-
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |-
+            ${{ runner.os }}-go-
+
+      - name: Install Dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |-
+          go mod download
+
+      - name: Build
+        run: |-
+          export GOOS="$(echo ${{ matrix.target }} | cut -d':' -f1)"
+          export GOARCH="$(echo ${{ matrix.target }} | cut -d':' -f2)"
+          export EXT="$(echo ${{ matrix.target }} | cut -d':' -f3)"
+
+          go build \
+            -trimpath \
+            -buildmode=pie \
+            -mod=readonly \
+            -modcacherw \
+            -o keyring.${GOOS}.${GOARCH} \
+            -ldflags "\
+              -X ${{ github.repository }}/version.APPNAME=keyring \
+              -X ${{ github.repository }}/version.VERSION=${{ steps.prep.outputs.version }} \
+              -X ${{ github.repository }}/version.GOVERSION=${{ steps.prep.outputs.go-version }} \
+              -X ${{ github.repository }}/version.BUILDTIME=${{ steps.prep.outputs.buildtime }} \
+              -X ${{ github.repository }}/version.COMMITHASH=${{ github.sha }} \
+              -s -w"
+
+          if [ ! -z "${EXT}"]; then
+              mv keyring.${GOOS}.${GOARCH} keyring${EXT}
+              sha256sum keyring${EXT} > keyring${EXT}.sha256sum.txt
+          else
+              sha256sum keyring.${GOOS}.${GOARCH} > keyring.${GOOS}.${GOARCH}.sha256sum.txt
+          fi
+
+      - name: Extract release notes
+        id: extract-release-notes
+        uses: ffurrer2/extract-release-notes@v1
+
+      - name: Upload binary and sum file
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: keyring.*
+          file_glob: true
+          tag: ${{ github.ref }}
+          overwrite: true
+          release_name: ${{ steps.prep.outputs.version }}
+          body: ${{ steps.extract-release-notes.outputs.release_notes }}
+          prerelease: steps.prep.outputs.pre != 'false'
