@@ -4,7 +4,7 @@ go 1.17
 
 require (
 	github.com/mattn/go-isatty v0.0.14
-	github.com/rs/zerolog v1.26.0
+	github.com/rs/zerolog v1.26.1
 	github.com/urfave/cli/v2 v2.3.0
 	github.com/zalando/go-keyring v0.1.1
 	golang.org/x/term v0.0.0-20201126162022-7de9c90e9dd1
