@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.1] - 2022-13-09
+Bumping zalando/go-keyring dependency from 0.1.1 to 0.2.0
+
 ## [1.0.0] - 2021-11-03
 This is the first version of `keyring`.
 It provides a very basic cli with `add`, `get`, `delete` capabilities and should work accross linux (with gnome-keyring), windows and osx.
