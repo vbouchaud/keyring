@@ -14,6 +14,8 @@ A very basic cli keyring tool to use accross various OS.
   * [Binary](#binary)
   * [Linux](#linux)
     + [Archlinux](#archlinux)
+  * [Darwin](#darwin)
+    + [With `brew`](#with--brew-)
 
 ## Usage
  
@@ -36,11 +38,11 @@ If the secret is not given in the command line, the user will be prompted for it
 Examples:
 ```
 # interactive
- »  keyring add --service foo --user bar
+$ keyring add --service foo --user bar
 secret: 
 
 # not interactive
- »  keyring add --service foo --user bar --secret baz
+$ keyring add --service foo --user bar --secret baz
 ```
 
 ### Get
@@ -58,7 +60,7 @@ OPTIONS:
 
 Example:
 ```
- »  keyring get --service foo --user bar                                                              ~
+$ keyring get --service foo --user bar                                                              ~
 baz
 ```
 
@@ -77,7 +79,7 @@ OPTIONS:
 
 Example:
 ```
- »  keyring delete --service foo --user bar                                                           ~
+$ keyring delete --service foo --user bar                                                           ~
 ```
 
 ## Distribution
@@ -99,3 +101,10 @@ Binaries for the following OS and architectures are available on the release pag
 
 [![AUR last modified](https://img.shields.io/aur/last-modified/keyring-cli-git?label=keyring-cli-git&style=for-the-badge)](https://aur.archlinux.org/packages/keyring-cli-git/)
 
+### Darwin
+#### With `brew`
+`keyring.rb` is not in the official repository, you can install it from [my repository](https://github.com/vbouchaud/homebrew-tap) with the following commands:
+
+`brew install vbouchaud/tap/keyring`
+
+Or `brew tap vbouchaud/tap` and then `brew install keyring`.
