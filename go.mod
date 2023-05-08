@@ -7,7 +7,7 @@ require (
 	github.com/rs/zerolog v1.29.1
 	github.com/urfave/cli/v2 v2.25.1
 	github.com/zalando/go-keyring v0.2.1
-	golang.org/x/term v0.0.0-20201126162022-7de9c90e9dd1
+	golang.org/x/term v0.8.0
 )
 
 require (
@@ -18,5 +18,5 @@ require (
 	github.com/mattn/go-colorable v0.1.12 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/xrash/smetrics v0.0.0-20201216005158-039620a65673 // indirect
-	golang.org/x/sys v0.0.0-20220811171246-fbc7d0a398ab // indirect
+	golang.org/x/sys v0.8.0 // indirect
 )
