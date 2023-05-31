@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.2] - 2023-31-05
+Releasing a new version with up to date dependencies.
+
+Full list available through `git log v1.0.1..v1.0.2 --author=dependabot --pretty=oneline`
+
 ## [1.0.1] - 2022-13-09
 Bumping zalando/go-keyring dependency from 0.1.1 to 0.2.0
 
