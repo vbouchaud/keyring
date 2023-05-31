@@ -3,7 +3,7 @@ module vbouchaud/keyring
 go 1.17
 
 require (
-	github.com/mattn/go-isatty v0.0.17
+	github.com/mattn/go-isatty v0.0.19
 	github.com/rs/zerolog v1.29.1
 	github.com/urfave/cli/v2 v2.25.1
 	github.com/zalando/go-keyring v0.2.1
